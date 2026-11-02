@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Install the local host for Xtaff Browser.">
+  <title>Install Xtaff Browser local host</title>
+  <style>
+    :root { color-scheme: light; --ink: #17302c; --muted: #4f6861; --line: #cad6ca; }
+    * { box-sizing: border-box; } body { margin: 0; background: #f4f5ed; color: var(--ink); font: 16px/1.7 system-ui, sans-serif; }
+    main { max-width: 860px; margin: auto; padding: 36px 24px 80px; } a { color: #255d47; text-underline-offset: 3px; }
+    h1 { font-size: clamp(32px, 6vw, 48px); line-height: 1.1; } h2 { margin-top: 40px; } p, li { max-width: 760px; }
+    code, pre { font-family: ui-monospace, monospace; } pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #e5ede0; padding: 16px; border-radius: 8px; }
+    .button { display: inline-block; background: #173e32; color: white; padding: 12px 18px; border-radius: 8px; text-decoration: none; }
+    .note { border-left: 4px solid #8eac59; padding-left: 16px; color: var(--muted); } hr { border: 0; border-top: 1px solid var(--line); margin: 48px 0; }
+  </style>
+</head>
+<body><main>
+  <p><a href="./">Xtaff home</a> / Xtaff Browser</p>
+  <h1>Install the Xtaff Browser local host</h1>
+  <p>The local host connects the Xtaff Browser extension to an AI assistant using MCP. The extension and host run on your computer. Your assistant may send data it receives to its configured model provider.</p>
+  <p><a class="button" href="downloads/xtaff-browser-host-0.1.0.zip">Download local host 0.1.0 (ZIP)</a></p>
+  <p>SHA-256: <code>3831cc658d8899d00908671174d7b6c909acaf8ff7fda1b3e5d115cd739475a9</code></p>
+  <p class="note">Requires desktop Chrome 125+ and Node.js 22+. macOS has been tested; Linux and Windows have not yet been verified. Keep the extracted folder in a permanent location.</p>
+  <h2>Setup</h2>
+  <ol>
+    <li>Install the Xtaff Browser extension from the Chrome Web Store.</li>
+    <li>Extract the ZIP and open a terminal in the extracted <code>xtaff-browser-host</code> folder. Run <code>node scripts/install.mjs --store</code>. If the folder or Node installation moves, run it again.</li>
+    <li>Configure your MCP client to run Node with the absolute path to <code>dist/index.js</code> in that folder. Find the Node executable with <code>node -p 'process.execPath'</code>. The downloaded README includes an example for Claude Code.</li>
+    <li>Restart the MCP client. Ask it to use Xtaff Browser; approve the requested website in the extension popup. Tabs must be in the Xtaff group.</li>
+  </ol>
+  <p>For Codex, add the following to <code>~/.codex/config.toml</code>, replacing both paths:</p>
+  <pre>[mcp_servers.xtaff-browser]
+command = "/absolute/path/to/node"
+args = ["/absolute/path/to/xtaff-browser-host/dist/index.js"]</pre>
+  <p>To uninstall, run <code>node scripts/install.mjs --store --uninstall</code> from the extracted folder, then remove it. See the <a href="browser-privacy.html">privacy policy</a> for data handling and controls.</p>
+  <hr>
+  <div lang="zh-CN">
+    <h2>中文安装说明</h2>
+    <p>Xtaff Browser 通过本机宿主连接浏览器和 MCP 助手。需要桌面版 Chrome 125+ 与 Node.js 22+。macOS 已验证；Linux 和 Windows 尚未验证。<a href="downloads/xtaff-browser-host-0.1.0.zip">下载本机宿主</a>并解压到固定位置。</p>
+    <ol><li>从 Chrome 网上应用店安装 Xtaff Browser 扩展。</li><li>在解压后的 <code>xtaff-browser-host</code> 目录打开终端，运行 <code>node scripts/install.mjs --store</code>。目录或 Node 位置改变后需重新运行。</li><li>在 MCP 客户端中将 Node 可执行文件设为命令，将该目录下 <code>dist/index.js</code> 的绝对路径设为参数；Codex 配置示例见上方，Claude Code 示例见压缩包中的 README。</li><li>重启 MCP 客户端，要求助手使用 Xtaff Browser，并在扩展弹窗批准需要访问的网站。</li></ol>
+    <p>卸载时，在解压目录运行 <code>node scripts/install.mjs --store --uninstall</code>，然后删除该目录。助手可能将扩展返回的数据发送给其配置的模型服务；详见<a href="browser-privacy.html">隐私政策</a>。</p>
+  </div>
+</main></body></html>
