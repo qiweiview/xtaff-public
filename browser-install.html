@@ -18,13 +18,14 @@
   <p><a href="./">Xtaff home</a> / Xtaff Browser</p>
   <h1>Install the Xtaff Browser local host</h1>
   <p>The local host connects the Xtaff Browser extension to an AI assistant using MCP. The extension and host run on your computer. Your assistant may send data it receives to its configured model provider.</p>
-  <p><a class="button" href="https://www.npmjs.com/package/@xtaff/browser-mcp">View @xtaff/browser-mcp on npm</a></p>
+  <p><a class="button" href="https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh">Get Xtaff Browser from the Chrome Web Store</a></p>
+  <p><a href="https://www.npmjs.com/package/@xtaff/browser-mcp">View @xtaff/browser-mcp on npm</a></p>
   <p class="note">Requires desktop Chrome 125+ and Node.js 22+. macOS has been tested; Linux and Windows have not yet been verified.</p>
   <h2>Setup</h2>
   <ol>
-    <li>Install the Xtaff Browser extension from the Chrome Web Store.</li>
+    <li>Install the Xtaff Browser extension from the <a href="https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh">Chrome Web Store</a>.</li>
     <li>Install and register the local host in a terminal:
-      <pre>npm install --global @xtaff/browser-mcp@0.1.0
+      <pre>npm install --global @xtaff/browser-mcp
 xtaff-browser-host</pre>
       Run the second command again after moving or replacing Node, the global npm directory, or the package.</li>
     <li>Configure your MCP client to run <code>xtaff-browser-mcp</code>. Find its absolute path using <code>which xtaff-browser-mcp</code> on macOS/Linux or <code>where xtaff-browser-mcp</code> on Windows.</li>
@@ -35,12 +36,11 @@ xtaff-browser-host</pre>
 command = "/absolute/path/to/xtaff-browser-mcp"</pre>
   <p>For Claude Code, run <code>claude mcp add --scope user --transport stdio xtaff-browser -- /absolute/path/to/xtaff-browser-mcp</code>.</p>
   <p>To uninstall, run <code>xtaff-browser-host --uninstall</code> followed by <code>npm uninstall --global @xtaff/browser-mcp</code>. See the <a href="browser-privacy.html">privacy policy</a> for data handling and controls.</p>
-  <p>Alternative: <a href="downloads/xtaff-browser-host-0.1.0.zip">download the standalone ZIP</a>. Its README includes installation steps. SHA-256: <code>3831cc658d8899d00908671174d7b6c909acaf8ff7fda1b3e5d115cd739475a9</code>.</p>
   <hr>
   <div lang="zh-CN">
     <h2>中文安装说明</h2>
     <p>Xtaff Browser 通过本机宿主连接浏览器和 MCP 助手。需要桌面版 Chrome 125+ 与 Node.js 22+。macOS 已验证；Linux 和 Windows 尚未验证。</p>
-    <ol><li>从 Chrome 网上应用店安装 Xtaff Browser 扩展。</li><li>运行上方 npm 安装和注册命令；Node、npm 全局目录或安装包位置改变后需重新注册。</li><li>在 MCP 客户端中配置 <code>xtaff-browser-mcp</code> 的绝对路径；Codex 和 Claude Code 示例见上方。</li><li>重启 MCP 客户端，要求助手使用 Xtaff Browser，并在扩展弹窗批准需要访问的网站。</li></ol>
-    <p>卸载时先运行 <code>xtaff-browser-host --uninstall</code>，再运行 <code>npm uninstall --global @xtaff/browser-mcp</code>。也可以<a href="downloads/xtaff-browser-host-0.1.0.zip">下载独立 ZIP</a>并按包内 README 安装。助手可能将扩展返回的数据发送给其配置的模型服务；详见<a href="browser-privacy.html">隐私政策</a>。</p>
+    <ol><li>从 <a href="https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh">Chrome 网上应用店</a>安装 Xtaff Browser 扩展。</li><li>运行上方 npm 安装和注册命令；Node、npm 全局目录或安装包位置改变后需重新注册。</li><li>在 MCP 客户端中配置 <code>xtaff-browser-mcp</code> 的绝对路径；Codex 和 Claude Code 示例见上方。</li><li>重启 MCP 客户端，要求助手使用 Xtaff Browser，并在扩展弹窗批准需要访问的网站。</li></ol>
+    <p>卸载时先运行 <code>xtaff-browser-host --uninstall</code>，再运行 <code>npm uninstall --global @xtaff/browser-mcp</code>。助手可能将扩展返回的数据发送给其配置的模型服务；详见<a href="browser-privacy.html">隐私政策</a>。</p>
   </div>
 </main></body></html>
