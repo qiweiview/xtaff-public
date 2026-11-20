@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Xtaff Browser — MCP bridge for AI coding agents in your own Chrome</title>
+  <meta name="description" content="Xtaff Browser is a Chrome extension plus a local MCP host that lets Claude Code, Codex and other AI coding agents work in the Chrome you are already signed in to, with per-site approval.">
+  <link rel="canonical" href="https://www.xtaff.com.cn/browser.html">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Xtaff">
+  <meta property="og:title" content="Xtaff Browser — MCP bridge for AI coding agents in your own Chrome">
+  <meta property="og:description" content="A Chrome extension plus a local MCP host. Your logins, per-site approval, one tab group per agent, site playbooks and saved sessions.">
+  <meta property="og:url" content="https://www.xtaff.com.cn/browser.html">
+  <meta name="twitter:card" content="summary">
+  <style>
+    :root { color-scheme: light; --ink: #17302c; --muted: #4f6861; --line: #cad6ca; --accent: #d7ed9a; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f4f5ed; color: var(--ink); font: 16px/1.7 system-ui, sans-serif; }
+    main { max-width: 860px; margin: auto; padding: 28px 24px 80px; }
+    a { color: #255d47; text-underline-offset: 3px; }
+    h1 { font-size: clamp(34px, 6vw, 50px); line-height: 1.08; letter-spacing: -.02em; margin: 18px 0 14px; }
+    h2 { margin: 48px 0 12px; font-size: 24px; line-height: 1.25; }
+    h3 { margin: 26px 0 6px; font-size: 17px; }
+    p, li { max-width: 760px; }
+    .lede { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); max-width: 700px; }
+    .kicker { font: bold 12px/1.4 "Trebuchet MS", sans-serif; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); margin: 0; }
+    .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin: 22px 0 10px; }
+    .button { display: inline-block; background: #173e32; color: #fff; padding: 11px 18px; border-radius: 8px; text-decoration: none; }
+    .button.ghost { background: transparent; color: #173e32; border: 1px solid #173e32; }
+    .note { border-left: 4px solid #8eac59; padding: 2px 0 2px 18px; color: var(--muted); }
+    table { border-collapse: collapse; width: 100%; margin: 14px 0 8px; font-size: 15px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 9px 12px; text-align: left; vertical-align: top; }
+    th { font: bold 12px/1.4 "Trebuchet MS", sans-serif; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+    td strong { font-weight: 600; }
+    code, pre { font-family: ui-monospace, monospace; }
+    pre { white-space: pre-wrap; overflow-wrap: anywhere; background: #e5ede0; padding: 16px; border-radius: 8px; }
+    .glance { display: grid; grid-template-columns: max-content 1fr; gap: 4px 18px; margin: 18px 0; font-size: 15px; }
+    .glance dt { color: var(--muted); }
+    .glance dd { margin: 0; }
+    .faq h3 { margin-bottom: 4px; }
+    hr { border: 0; border-top: 1px solid var(--line); margin: 44px 0; }
+    footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--line); color: var(--muted); font-size: 14px; }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Xtaff Browser",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "macOS, Linux, Windows",
+    "softwareRequirements": "Desktop Chrome 125+ and Node.js 22+",
+    "description": "A Chrome extension and a local MCP host that let AI coding agents work in the Chrome you are already signed in to, under per-site approval. Each MCP connection gets its own tab group; site playbooks and saved sessions are stored locally.",
+    "url": "https://www.xtaff.com.cn/browser.html",
+    "downloadUrl": "https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh",
+    "installUrl": "https://www.xtaff.com.cn/browser-install.html",
+    "isAccessibleForFree": true,
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Person", "name": "刘启威", "url": "https://liuqiwei.dev" },
+    "publisher": { "@type": "Organization", "name": "Xtaff" },
+    "sameAs": [
+      "https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh",
+      "https://www.npmjs.com/package/@xtaff/browser-mcp",
+      "https://github.com/qiweiview/xtaff-public"
+    ]
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Xtaff Browser?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Xtaff Browser is a Chrome extension plus a local MCP host. It lets an AI coding agent use the Chrome you are already signed in to, with per-site approval, instead of starting a separate browser." }
+      },
+      {
+        "@type": "Question",
+        "name": "How is it different from Playwright MCP or Chrome DevTools MCP?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Playwright MCP starts its own browser with a fresh profile, so your logins do not carry over. Chrome DevTools MCP attaches over the DevTools protocol, and since Chrome 136 the default profile refuses --remote-debugging-port. Xtaff Browser runs inside your existing Chrome through an extension and a local host." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does my browsing data go to Xtaff?",
+        "acceptedAnswer": { "@type": "Answer", "text": "No. The extension talks to a native host on your machine, not to a Xtaff service. What the agent reads is sent by your MCP client to the model provider configured there." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can several agents use the same browser at once?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes. Each MCP connection gets its own tab group titled Xtaff·<name>, and tools in one group cannot see or act on tabs in another. Site approvals, logins and browser memory stay shared." }
+      },
+      {
+        "@type": "Question",
+        "name": "Which MCP clients are supported?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Any client that can run a local stdio server, such as Claude Code, Codex, Cursor or Zed. An HTTP mode is available for clients that connect over HTTP." }
+      },
+      {
+        "@type": "Question",
+        "name": "Does it work on Windows or Linux?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Not verified yet. The extension, host and server are built for desktop Chrome on macOS, Windows and Linux, but only macOS has been tested so far." }
+      },
+      {
+        "@type": "Question",
+        "name": "Can it operate an intranet system that needs a login?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Yes, as long as the site opens in your Chrome. Sign-in, CAPTCHA and MFA are handed back to you and the agent waits, then continues." }
+      },
+      {
+        "@type": "Question",
+        "name": "Xtaff Browser 是什么？",
+        "acceptedAnswer": { "@type": "Answer", "text": "Xtaff Browser 是 Chrome 扩展 + 本机 MCP 宿主，让 AI 编程助手在你当前已登录的 Chrome 里操作网页，默认按站点授权，而不是另起一个干净的浏览器。" }
+      },
+      {
+        "@type": "Question",
+        "name": "和 Playwright MCP、Chrome DevTools MCP 有什么区别？",
+        "acceptedAnswer": { "@type": "Answer", "text": "Playwright 类方案另起浏览器、用新 profile，登录态带不过去；CDP 附加受 Chrome 136 起「默认 profile 不允许调试端口」的限制。Xtaff 通过扩展 + 本机宿主直接在你现有 Chrome 里执行。" }
+      },
+      {
+        "@type": "Question",
+        "name": "支持 Windows 和 Linux 吗？",
+        "acceptedAnswer": { "@type": "Answer", "text": "尚未验证。扩展、宿主和服务端按 macOS / Windows / Linux 桌面版 Chrome 设计，目前只实测了 macOS。" }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+<main>
+  <p><a href="./">Xtaff home</a> / Xtaff Browser</p>
+  <p class="kicker">Browser bridge for AI coding agents</p>
+  <h1>Your agent works in the browser you are already in.</h1>
+  <p class="lede">Xtaff Browser connects Claude Code, Codex, Cursor or any other MCP client to your real Chrome — your tabs, your sessions, your logins — and asks you before an agent touches a new site.</p>
+  <div class="buttons">
+    <a class="button" href="https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh">Get it on the Chrome Web Store</a>
+    <a class="button ghost" href="browser-install.html">Install the local host</a>
+    <a class="button ghost" href="https://www.npmjs.com/package/@xtaff/browser-mcp">npm package</a>
+  </div>
+  <p class="note">Desktop Chrome 125+ and Node.js 22+. macOS has been tested; Linux and Windows have not yet been verified.</p>
+
+  <dl class="glance">
+    <dt>Current release</dt><dd>0.7.2 (2026-11-19)</dd>
+    <dt>Tools exposed</dt><dd>41</dd>
+    <dt>Transport</dt><dd>stdio, or HTTP mode for remote use</dd>
+    <dt>Runs in</dt><dd>Your Chrome, through an MV3 extension and a native host</dd>
+    <dt>Cloud relay</dt><dd>None — the extension does not connect to a Xtaff service</dd>
+  </dl>
+
+  <h2>The problem: agents cannot see your browser</h2>
+  <p>A coding agent can read your files and run commands, but the page you are looking at — the logged-in admin panel, the internal tool, the checkout you are debugging — is outside its reach. The usual workarounds each cost something:</p>
+  <table>
+    <thead><tr><th>Route</th><th>Uses your current logins</th><th>Starts another browser</th><th>Main cost</th></tr></thead>
+    <tbody>
+      <tr><td>Playwright / Puppeteer with its own browser</td><td>No — fresh profile</td><td>Yes</td><td>You log in again; SSO and MFA usually stop it</td></tr>
+      <tr><td>Attach over the DevTools protocol</td><td>Partly</td><td>No</td><td>Since Chrome 136, the default profile refuses <code>--remote-debugging-port</code></td></tr>
+      <tr><td>Cloud browser</td><td>No</td><td>Remote</td><td>Pages leave your machine; intranet systems are unreachable</td></tr>
+      <tr><td><strong>Extension + local host (Xtaff Browser)</strong></td><td><strong>Yes</strong></td><td><strong>No</strong></td><td>Register a local host once; Chrome 125+</td></tr>
+    </tbody>
+  </table>
+
+  <h2>How it works</h2>
+  <ol>
+    <li><strong>The extension executes.</strong> It runs inside your Chrome, owns a tab group, and performs clicks, typing, navigation and reads only after the origin is approved.</li>
+    <li><strong>The host connects.</strong> A small native host on your machine bridges the extension to the MCP server over native messaging. It is registered once with <code>xtaff-browser-host</code>.</li>
+    <li><strong>The server exposes tools.</strong> <code>xtaff-browser-mcp</code> gives the agent 41 tools over stdio or HTTP, and returns screenshots, page structure, network records and script results.</li>
+  </ol>
+
+  <h2>What it adds beyond a plain bridge</h2>
+  <h3>One tab group per MCP connection</h3>
+  <p>Each connection gets its own <code>Xtaff·&lt;name&gt;</code> group. Tab IDs, element refs, batches, scripts, uploads, downloads, sessions and takeovers from another group are rejected at the extension, not merely filtered in the server. You can stop one agent by group and keep the others running.</p>
+  <h3>Per-site approval by default</h3>
+  <p>A site the agent has not been granted opens as a blank tab with a prompt. Nothing loads until you allow that origin. Stopping, taking over and resuming are all in the popup, with a badge and a desktop notification when the agent is waiting.</p>
+  <h3>Site playbooks, including your own walkthroughs</h3>
+  <p>An agent can save how a site behaves and other local agents can search that knowledge later. You can also record a walkthrough in the popup; the draft covers HTTP/HTTPS pages, up to 20 steps, and does not store typed text or sensitive field values until you review and publish it.</p>
+  <h3>Saved sessions and account switching</h3>
+  <p>Capture the cookies and localStorage of a signed-in tab as a named profile, then apply it to switch accounts. Credentials stay in the session store; the model context only sees the profile name and the resulting page.</p>
+  <h3>Remote use over HTTP and a tunnel</h3>
+  <p>Run the server in HTTP mode behind your own tunnel to drive a browser on another machine — for example, the always-on office computer from home. HTTP mode has no TLS of its own and is meant for loopback or a tunnel, never a public port.</p>
+  <p>Also in the 41 tools: batched steps (up to 50), a restricted scripting tool for loops and branches, console and network inspection with redacted bodies, screenshots with password masking, file upload up to 10 MB and download capture, and explicit human takeover with <code>human_required</code>.</p>
+
+  <h2>Boundaries — what it does not do</h2>
+  <ul>
+    <li><strong>Not a CI or parallel automation tool.</strong> It drives the browser you use; for clean repeatable runs in CI, use Playwright.</li>
+    <li><strong>No hosted or cloud browser.</strong> Remote use needs your own tunnel, and HTTP mode is unencrypted.</li>
+    <li><strong>Desktop Chrome only.</strong> Not Firefox, Safari or Chrome for Android.</li>
+    <li><strong>Human steps stay human.</strong> Sign-in, CAPTCHA, MFA and payments are handed back to you.</li>
+    <li><strong>What the agent reads leaves through your client.</strong> Your MCP client sends it to the model provider configured there; that is the client's data path, not Xtaff's.</li>
+  </ul>
+
+  <h2 class="faq">Frequently asked</h2>
+  <div class="faq">
+    <h3>What is Xtaff Browser?</h3>
+    <p>Xtaff Browser is a Chrome extension plus a local MCP host. It lets an AI coding agent use the Chrome you are already signed in to, with per-site approval, instead of starting a separate browser.</p>
+    <h3>How is it different from Playwright MCP or Chrome DevTools MCP?</h3>
+    <p>Playwright MCP starts its own browser with a fresh profile, so your logins do not carry over. Chrome DevTools MCP attaches over the DevTools protocol, and since Chrome 136 the default profile refuses <code>--remote-debugging-port</code>. Xtaff Browser runs inside your existing Chrome through an extension and a local host.</p>
+    <h3>Does my browsing data go to Xtaff?</h3>
+    <p>No. The extension talks to a native host on your machine, not to a Xtaff service. What the agent reads is sent by your MCP client to the model provider configured there.</p>
+    <h3>Can several agents use the same browser at once?</h3>
+    <p>Yes. Each MCP connection gets its own tab group titled <code>Xtaff·&lt;name&gt;</code>, and tools in one group cannot see or act on tabs in another. Site approvals, logins and browser memory stay shared.</p>
+    <h3>Which MCP clients are supported?</h3>
+    <p>Any client that can run a local stdio server, such as Claude Code, Codex, Cursor or Zed. An HTTP mode is available for clients that connect over HTTP.</p>
+    <h3>Does it work on Windows or Linux?</h3>
+    <p>Not verified yet. The extension, host and server are built for desktop Chrome on macOS, Windows and Linux, but only macOS has been tested so far.</p>
+    <h3>Can it operate an intranet system that needs a login?</h3>
+    <p>Yes, as long as the site opens in your Chrome. Sign-in, CAPTCHA and MFA are handed back to you and the agent waits, then continues.</p>
+    <h3>How do I uninstall it?</h3>
+    <p>Run <code>xtaff-browser-host --uninstall</code>, then <code>npm uninstall --global @xtaff/browser-mcp</code>, and remove the extension from Chrome. See the <a href="browser-install.html">install guide</a>.</p>
+  </div>
+
+  <hr>
+
+  <div lang="zh-CN">
+    <h2>中文说明</h2>
+    <p>Xtaff Browser 是 Chrome 扩展 + 本机 MCP 宿主。它让 Claude Code、Codex、Cursor 等 AI 编程助手在<strong>你当前已登录的 Chrome</strong> 里操作网页：用你现成的标签页和登录态，默认按站点授权，而不是另起一个干净的浏览器。</p>
+    <h3>和另外三条路线比</h3>
+    <table>
+      <thead><tr><th>路线</th><th>用现有登录态</th><th>另起浏览器</th><th>主要代价</th></tr></thead>
+      <tbody>
+        <tr><td>Playwright / Puppeteer 自建浏览器</td><td>否（默认新 profile）</td><td>是</td><td>要重新登录，SSO / MFA 通常过不去</td></tr>
+        <tr><td>CDP 附加调试端口</td><td>部分</td><td>否</td><td>Chrome 136 起默认 profile 不允许 <code>--remote-debugging-port</code></td></tr>
+        <tr><td>云端浏览器</td><td>否</td><td>远程</td><td>页面离开本机，内网系统进不去</td></tr>
+        <tr><td><strong>扩展 + 本机宿主（Xtaff 走这条）</strong></td><td><strong>是</strong></td><td><strong>否</strong></td><td>注册一次本机宿主；需要 Chrome 125+</td></tr>
+      </tbody>
+    </table>
+    <h3>在普通桥接之外</h3>
+    <ul>
+      <li><strong>每个 MCP 连接一个标签组</strong>：跨组的标签号、元素引用、批处理、脚本、上传下载、会话和接管都在扩展执行点被拒绝。</li>
+      <li><strong>默认逐站授权</strong>：未授权的站点先开空白标签并请求允许，允许前不加载目标页面。</li>
+      <li><strong>站点 Playbook</strong>：Agent 可保存站点经验供本机所有 Agent 检索；你也可以在弹窗里示教录制（仅 HTTP/HTTPS，最多 20 步，不记录输入文字和敏感字段值），编辑后再发布。</li>
+      <li><strong>会话存档</strong>：把已登录标签页的 Cookies 与 LocalStorage 存成具名档案，用来切换账号；凭据不进模型上下文。</li>
+      <li><strong>跨机使用</strong>：MCP 支持 HTTP 模式，配合你自己的隧道，用家里的 Agent 操作公司常开电脑上的浏览器。HTTP 本身不加密，只走回环或隧道。</li>
+    </ul>
+    <h3>边界</h3>
+    <p>不是 CI 并行自动化工具（那边用 Playwright）；不做云端中转，也没有托管浏览器；仅桌面版 Chrome，不支持 Firefox / Safari / 安卓版 Chrome；登录、验证码、MFA、支付等仍由你本人完成；Agent 读到的内容会由它自己的 MCP 客户端发往所配置的模型服务。</p>
+    <h3>常见问题</h3>
+    <p><strong>Xtaff Browser 是什么？</strong><br>Xtaff Browser 是 Chrome 扩展 + 本机 MCP 宿主，让 AI 编程助手在你当前已登录的 Chrome 里操作网页，默认按站点授权，而不是另起一个干净的浏览器。</p>
+    <p><strong>和 Playwright MCP、Chrome DevTools MCP 有什么区别？</strong><br>Playwright 类方案另起浏览器、用新 profile，登录态带不过去；CDP 附加受 Chrome 136 起「默认 profile 不允许调试端口」的限制。Xtaff 通过扩展 + 本机宿主直接在你现有 Chrome 里执行。</p>
+    <p><strong>支持 Windows 和 Linux 吗？</strong><br>尚未验证。扩展、宿主和服务端按 macOS / Windows / Linux 桌面版 Chrome 设计，目前只实测了 macOS。</p>
+    <p><strong>怎么卸载？</strong><br>先运行 <code>xtaff-browser-host --uninstall</code>，再运行 <code>npm uninstall --global @xtaff/browser-mcp</code>，最后在 Chrome 里移除扩展。</p>
+  </div>
+
+  <footer>
+    <p><a href="./">Xtaff home</a> · <a href="browser-install.html">Install guide</a> · <a href="browser-privacy.html">Browser privacy</a> · <a href="https://www.npmjs.com/package/@xtaff/browser-mcp">npm</a> · <a href="https://github.com/qiweiview/xtaff-public">GitHub</a></p>
+  </footer>
+</main>
+</body>
+</html>
