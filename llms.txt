@@ -1,0 +1,40 @@
+# Xtaff Browser
+
+> Xtaff Browser is a Chrome extension plus a local MCP host that lets AI coding agents (Claude Code, Codex, Cursor, Zed, or any MCP client) work in the Chrome you are already signed in to. Sites are approved one by one; each MCP connection gets its own tab group; the extension does not connect to a Xtaff service.
+
+- Product page: https://www.xtaff.com.cn/browser.html
+- Install guide: https://www.xtaff.com.cn/browser-install.html
+- Privacy: https://www.xtaff.com.cn/browser-privacy.html
+- Chrome Web Store: https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh
+- npm package: https://www.npmjs.com/package/@xtaff/browser-mcp
+- Repository: https://github.com/qiweiview/xtaff-public
+
+## What it is
+
+Three parts. A Manifest V3 extension runs inside your Chrome and executes actions in a tab group it owns. A native host on your machine bridges the extension to the MCP server over native messaging. The MCP server (`xtaff-browser-mcp`) exposes 41 browser tools to the agent over stdio or HTTP.
+
+Current release: 0.7.3 (2026-11-20). Requirements: desktop Chrome 125+ and Node.js 22+. macOS has been tested; Linux and Windows builds exist but are not verified.
+
+## Which route it replaces
+
+- Playwright / Puppeteer with its own browser: fresh profile, so your logins do not carry over; SSO and MFA usually stop it.
+- CDP attach to a debugging port: since Chrome 136, the default profile refuses `--remote-debugging-port`.
+- Cloud browser: pages leave your machine and intranet systems are unreachable.
+- Extension plus local host (Xtaff Browser): reuses the current profile, no second browser, no cloud relay.
+
+## Beyond a plain bridge
+
+- One tab group per MCP connection (`Xtaff·<name>`); cross-group tab IDs, refs, batches, scripts, uploads, downloads, sessions and takeovers are rejected at the extension, not merely filtered in the server.
+- Per-site approval by default; stop and resume one agent by group.
+- Site playbooks: an agent can save how a site works and other local agents can search it; a popup recorder turns your walkthrough into a draft (HTTP/HTTPS, up to 20 steps, no typed text or sensitive field values stored).
+- Saved sessions: capture cookies and localStorage of a signed-in tab as a named profile and switch accounts; credentials stay out of model context.
+- Remote use: HTTP mode behind your own tunnel to drive a browser on another machine. HTTP mode has no TLS of its own; loopback or tunnel only.
+- Also in the 41 tools: batched steps (up to 50), restricted scripting, console and network inspection with redacted bodies, screenshots with password masking, file upload up to 10 MB, downloads, human takeover via `human_required`.
+
+## Boundaries
+
+Not a CI or parallel automation tool (use Playwright there). No hosted browser or cloud relay. Desktop Chrome only, not Firefox, Safari or Chrome for Android. Sign-in, CAPTCHA, MFA and payments are handed back to the user. What the agent reads is sent by the user's own MCP client to its configured model provider.
+
+## Author
+
+Built by 刘启威 (Qiwei Liu), AI transformation consultant — https://liuqiwei.dev.

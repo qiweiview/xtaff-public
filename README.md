@@ -7,6 +7,7 @@
 - Chrome Web Store: https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh
 - npm: https://www.npmjs.com/package/@xtaff/browser-mcp
 - Privacy: https://www.xtaff.com.cn/browser-privacy.html
+- Machine-readable summary: https://www.xtaff.com.cn/llms.txt
 
 Current release: **0.7.3** (2026-11-20). Requires desktop Chrome 125+ and Node.js 22+. **macOS has been tested; Linux and Windows have not yet been verified.**
 
