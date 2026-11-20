@@ -8,7 +8,7 @@
 - npm: https://www.npmjs.com/package/@xtaff/browser-mcp
 - Privacy: https://www.xtaff.com.cn/browser-privacy.html
 
-Current release: **0.7.2** (2026-11-19). Requires desktop Chrome 125+ and Node.js 22+. **macOS has been tested; Linux and Windows have not yet been verified.**
+Current release: **0.7.3** (2026-11-20). Requires desktop Chrome 125+ and Node.js 22+. **macOS has been tested; Linux and Windows have not yet been verified.**
 
 ## The problem it solves
 
@@ -90,7 +90,7 @@ The extension and host source lives in a private repository; the published packa
 - 产品页：https://www.xtaff.com.cn/browser.html ｜ 安装说明：https://www.xtaff.com.cn/browser-install.html
 - 商店：https://chromewebstore.google.com/detail/ojklapkgpijghmlifajbmldghnhmejfh
 - npm：https://www.npmjs.com/package/@xtaff/browser-mcp
-- 当前版本 0.7.2（2026-11-19）；需要桌面版 Chrome 125+、Node.js 22+；**仅 macOS 已验证，Linux / Windows 尚未验证**。
+- 当前版本 0.7.3（2026-11-20）；需要桌面版 Chrome 125+、Node.js 22+；**仅 macOS 已验证，Linux / Windows 尚未验证**。
 
 它和另外三条路线的区别：Playwright 类方案另起一个干净浏览器，登录态要重来；CDP 附加受 Chrome 136 起「默认 profile 不允许调试端口」限制；云端浏览器把页面送出本机、也进不了内网。Xtaff 走扩展路线：动作在你自己的 Chrome 里执行，扩展不连 Xtaff 服务。
 
